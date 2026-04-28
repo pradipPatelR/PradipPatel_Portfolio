@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pradip Patel — Senior iOS Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --indigo:#6366f1;--indigo-l:#818cf8;--indigo-d:#4338ca;--indigo-xl:#c7d2fe;
+  --pink:#ec4899;--pink-l:#f472b6;
+  --cyan:#06b6d4;--cyan-l:#67e8f9;
+  --amber:#f59e0b;--amber-l:#fcd34d;
+  --bg:#020817;--bg2:#050d1f;
+  --surf:#0f1c35;--surf2:#162040;
+  --txt:#e8edf5;--txt-m:#8899b8;--txt-d:#4a5d7a;
+  --bdr:rgba(99,102,241,.14);--bdr2:rgba(99,102,241,.28);
+  --gi:linear-gradient(135deg,var(--indigo),var(--pink));
+  --gc:linear-gradient(135deg,var(--cyan),var(--indigo));
+  --ga:linear-gradient(135deg,var(--amber),var(--pink));
+  --glow-i:0 0 50px rgba(99,102,241,.3);
+  --glow-p:0 0 50px rgba(236,72,153,.3);
+  --glow-c:0 0 50px rgba(6,182,212,.3);
+  --glow-a:0 0 50px rgba(245,158,11,.3);
+  --r:16px;--rl:24px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);overflow-x:hidden;cursor:none;-webkit-font-smoothing:antialiased}
+::selection{background:rgba(99,102,241,.35);color:#fff}
+a{text-decoration:none;color:inherit}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--indigo),var(--pink),var(--cyan));border-radius:99px}
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.32;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
+  background-size:250px;
+}
+
+/* CURSOR */
+#cur{position:fixed;width:10px;height:10px;border-radius:50%;background:var(--indigo);pointer-events:none;z-index:99999;transform:translate(-50%,-50%);box-shadow:0 0 12px var(--indigo),0 0 28px rgba(99,102,241,.6);transition:transform .08s,background .25s,box-shadow .25s;mix-blend-mode:screen}
+#cur-ring{position:fixed;width:34px;height:34px;border-radius:50%;border:1.5px solid rgba(99,102,241,.55);pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .2s,height .2s,border-color .2s}
+body.hov #cur{transform:translate(-50%,-50%) scale(2);background:var(--pink);box-shadow:0 0 18px var(--pink),0 0 40px rgba(236,72,153,.6)}
+body.hov #cur-ring{width:52px;height:52px;border-color:rgba(236,72,153,.45)}
+
+/* LOADER */
+#loader{position:fixed;inset:0;z-index:99997;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;transition:opacity .9s ease,visibility .9s}
+#loader.out{opacity:0;visibility:hidden}
+.ld-init{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(5rem,14vw,9rem);letter-spacing:-.04em;background:linear-gradient(135deg,var(--indigo-l),var(--pink),var(--cyan),var(--amber));background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:ldS 2s ease infinite,ldP .6s ease both}
+@keyframes ldS{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes ldP{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.ld-bar-wrap{width:220px;height:2.5px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden}
+.ld-bar{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--indigo),var(--pink),var(--cyan),var(--amber));animation:ldB 1.9s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes ldB{0%{width:0}55%{width:70%}85%{width:88%}100%{width:100%}}
+.ld-sub{font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--txt-d);font-weight:500}
+
+/* CANVAS */
+#pcv{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* NAV */
+nav{position:fixed;top:0;inset-inline:0;z-index:5000;display:flex;align-items:center;justify-content:space-between;height:62px;padding:0 clamp(1.2rem,4vw,3.5rem);background:rgba(2,8,23,.72);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-bottom:1px solid var(--bdr)}
+.nav-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;letter-spacing:-.02em;background:var(--gi);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-menu{display:flex;gap:1.8rem;list-style:none;align-items:center}
+.nav-menu a{font-size:.78rem;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--txt-m);position:relative;padding-bottom:3px;transition:color .25s}
+.nav-menu a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:var(--gi);border-radius:99px;transition:width .3s ease}
+.nav-menu a:hover{color:var(--txt)}
+.nav-menu a:hover::after{width:100%}
+.nav-btn{background:var(--gi)!important;color:#fff!important;padding:7px 18px;border-radius:10px;box-shadow:0 4px 20px rgba(99,102,241,.3);transition:transform .2s,box-shadow .2s!important}
+.nav-btn:hover{transform:translateY(-2px)!important;box-shadow:0 8px 28px rgba(99,102,241,.5)!important}
+.nav-btn::after{display:none!important}
+.nav-hbg{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:none;padding:6px}
+.nav-hbg span{display:block;width:22px;height:1.5px;background:var(--txt-m);border-radius:2px;transition:.3s}
+
+/* LAYOUT */
+main{position:relative;z-index:1}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(1.2rem,4vw,3.5rem)}
+section.wrap{padding-top:5.5rem;padding-bottom:5.5rem}
+.sec-lbl{display:inline-flex;align-items:center;gap:.55rem;font-size:.68rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--indigo-l);margin-bottom:.85rem}
+.sec-lbl::before{content:'';width:18px;height:1.5px;background:var(--indigo-l)}
+.sec-title{font-family:'Syne',sans-serif;font-weight:800;letter-spacing:-.035em;font-size:clamp(2.2rem,5vw,3.6rem);line-height:1.02;margin-bottom:3rem;background:linear-gradient(135deg,#fff 30%,var(--txt-m));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--bdr2) 30%,var(--bdr2) 70%,transparent);max-width:1180px;margin:0 auto;padding:0 clamp(1.2rem,4vw,3.5rem)}
+.rv{opacity:0;transform:translateY(28px);transition:opacity .75s ease,transform .75s ease}
+.rv.in{opacity:1;transform:none}
+
+/* HERO */
+#hero{min-height:100svh;display:flex;align-items:center;justify-content:space-between;gap:3rem;flex-wrap:wrap;padding-top:5rem;padding-bottom:3rem}
+.hero-l{flex:1;min-width:280px;display:flex;flex-direction:column}
+.hero-pill{display:inline-flex;align-items:center;gap:.55rem;width:fit-content;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.24);border-radius:99px;padding:6px 16px;font-size:.78rem;font-weight:500;color:var(--indigo-l);margin-bottom:1.6rem;animation:fadeUp .7s .1s ease both}
+.pill-dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);animation:dotB 1.6s infinite}
+@keyframes dotB{0%,100%{opacity:1;box-shadow:0 0 6px var(--cyan)}50%{opacity:.3;box-shadow:none}}
+.hero-name{font-family:'Syne',sans-serif;font-weight:800;letter-spacing:-.05em;font-size:clamp(3.5rem,10vw,7.5rem);line-height:.9;margin-bottom:1.4rem;background:linear-gradient(145deg,#fff 0%,var(--indigo-xl) 35%,var(--pink-l) 65%,var(--cyan-l) 100%);background-size:250%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:nameS 5s ease infinite,fadeUp .8s .15s ease both}
+@keyframes nameS{0%,100%{background-position:0% 60%}50%{background-position:100% 40%}}
+.hero-sub{font-size:clamp(.95rem,2vw,1.15rem);color:var(--txt-m);font-weight:300;line-height:1.7;max-width:500px;margin-bottom:2.5rem;animation:fadeUp .8s .25s ease both;opacity:0;animation-fill-mode:forwards}
+.hero-sub strong{color:var(--txt);font-weight:500}
+.hero-ctas{display:flex;gap:1rem;flex-wrap:wrap;animation:fadeUp .8s .35s ease both;opacity:0;animation-fill-mode:forwards}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:13px 26px;border-radius:12px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.88rem;cursor:none;border:none;transition:all .28s ease}
+.btn-p{background:var(--gi);color:#fff;box-shadow:0 6px 28px rgba(99,102,241,.4)}
+.btn-p:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(99,102,241,.55)}
+.btn-s{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:var(--txt-m)}
+.btn-s:hover{background:rgba(255,255,255,.08);color:var(--txt);transform:translateY(-2px)}
+
+/* HERO CARD */
+.hero-r{flex:0 0 auto;animation:fadeUp .9s .45s ease both;opacity:0;animation-fill-mode:forwards}
+.c3w{perspective:900px}
+.c3{width:clamp(280px,30vw,320px);background:rgba(15,28,53,.85);border:1px solid var(--bdr2);border-radius:var(--rl);padding:1.75rem;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 30px 70px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.07);animation:cardF 7s ease-in-out infinite;transform-style:preserve-3d;transition:transform .12s ease}
+@keyframes cardF{0%,100%{transform:rotateX(5deg) rotateY(-7deg) translateY(0)}33%{transform:rotateX(-3deg) rotateY(5deg) translateY(-14px)}66%{transform:rotateX(4deg) rotateY(1deg) translateY(-7px)}}
+.c3-head{display:flex;align-items:center;gap:.8rem;padding-bottom:1.2rem;margin-bottom:1.2rem;border-bottom:1px solid var(--bdr)}
+.c3-av{width:46px;height:46px;border-radius:14px;flex-shrink:0;background:var(--gi);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:#fff;box-shadow:0 6px 20px rgba(99,102,241,.4)}
+.c3-nm{font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem;line-height:1.2}
+.c3-rl{font-size:.7rem;color:var(--txt-d);margin-top:.15rem}
+.stat-g{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+.stat{background:rgba(255,255,255,.03);border:1px solid var(--bdr);border-radius:14px;padding:.9rem;text-align:center;transition:.3s}
+.stat:hover{border-color:rgba(99,102,241,.35);box-shadow:var(--glow-i)}
+.stat-n{font-family:'Syne',sans-serif;font-size:1.7rem;font-weight:800;background:var(--gi);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-l{font-size:.65rem;color:var(--txt-d);margin-top:.15rem;letter-spacing:.04em}
+.c3-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1rem}
+.c3-tag{font-size:.62rem;font-weight:600;padding:3px 10px;border-radius:99px;background:rgba(99,102,241,.12);color:var(--indigo-l);border:1px solid rgba(99,102,241,.2)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+/* SKILLS */
+.sk-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.4rem}
+.sk-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:1.5rem;transition:border-color .3s,box-shadow .3s,transform .3s}
+.sk-card:hover{border-color:var(--bdr2);box-shadow:var(--glow-i);transform:translateY(-4px)}
+.sk-hd{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--txt-d);margin-bottom:1.1rem}
+.bar-row{margin-bottom:.9rem}
+.bar-lbl{display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:.4rem}
+.bar-lbl span:last-child{font-size:.68rem;color:var(--txt-d)}
+.bar-bg{height:4px;background:rgba(255,255,255,.05);border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;width:0;border-radius:99px;transition:width 1.3s cubic-bezier(.4,0,.2,1)}
+.chips{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.5rem}
+.chip{font-size:.68rem;font-weight:500;padding:4px 11px;border-radius:99px;cursor:none;transition:transform .2s,filter .2s}
+.chip:hover{transform:translateY(-2px);filter:brightness(1.25)}
+.ci{background:rgba(99,102,241,.1);color:var(--indigo-l);border:1px solid rgba(99,102,241,.18)}
+.cp{background:rgba(236,72,153,.1);color:var(--pink-l);border:1px solid rgba(236,72,153,.18)}
+.cc{background:rgba(6,182,212,.1);color:var(--cyan-l);border:1px solid rgba(6,182,212,.18)}
+.ca{background:rgba(245,158,11,.1);color:var(--amber-l);border:1px solid rgba(245,158,11,.18)}
+
+/* TIMELINE */
+.tl{position:relative;padding-left:2.2rem;display:flex;flex-direction:column;gap:2.2rem}
+.tl::before{content:'';position:absolute;left:4px;top:8px;bottom:8px;width:1.5px;background:linear-gradient(to bottom,var(--indigo),var(--pink) 50%,var(--cyan) 80%,transparent)}
+.tl-item{position:relative}
+.tl-dot{position:absolute;left:-2.55rem;top:.4rem;width:18px;height:18px;border-radius:50%;background:var(--gi);border:2.5px solid var(--bg);box-shadow:0 0 0 4px rgba(99,102,241,.18),var(--glow-i)}
+.tl-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:1.6rem;transition:.3s}
+.tl-card:hover{border-color:rgba(236,72,153,.35);box-shadow:var(--glow-p);transform:translateX(8px)}
+.tl-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:.6rem;margin-bottom:.5rem}
+.tl-co{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700}
+.tl-date{font-size:.7rem;color:var(--txt-d);background:rgba(255,255,255,.04);border:1px solid var(--bdr);padding:4px 11px;border-radius:99px;white-space:nowrap}
+.tl-role{font-size:.82rem;color:var(--indigo-l);font-weight:500;margin-bottom:.85rem}
+.tl-ul{list-style:none;display:flex;flex-direction:column;gap:.5rem}
+.tl-ul li{font-size:.85rem;color:var(--txt-m);line-height:1.65;padding-left:1.1rem;position:relative}
+.tl-ul li::before{content:'▸';position:absolute;left:0;color:var(--cyan);top:.05em;font-size:.65rem}
+
+/* PROJECTS */
+.proj-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.4rem}
+.proj-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--rl);padding:1.75rem;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:.9rem;transition:.35s;cursor:none}
+.proj-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(99,102,241,.07),rgba(236,72,153,.07),rgba(6,182,212,.04));opacity:0;transition:opacity .4s}
+.proj-card::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent);transition:left .5s}
+.proj-card:hover::before{opacity:1}
+.proj-card:hover::after{left:140%}
+.proj-card:hover{transform:translateY(-7px);border-color:rgba(99,102,241,.38);box-shadow:var(--glow-i),0 20px 50px rgba(0,0,0,.4)}
+.proj-em{font-size:2rem;line-height:1}
+.proj-nm{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700}
+.proj-ds{font-size:.83rem;color:var(--txt-m);line-height:1.65;flex:1}
+.proj-tags{display:flex;flex-wrap:wrap;gap:.4rem}
+.proj-tag{font-size:.66rem;font-weight:600;padding:3px 9px;border-radius:99px;background:rgba(6,182,212,.09);color:var(--cyan-l);border:1px solid rgba(6,182,212,.18)}
+
+/* EDU + LANG */
+.edu-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.4rem}
+.edu-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:1.5rem;transition:.3s}
+.edu-card:hover{border-color:rgba(245,158,11,.35);box-shadow:var(--glow-a);transform:translateY(-4px)}
+.edu-ic{font-size:1.9rem;margin-bottom:.8rem}
+.edu-deg{font-family:'Syne',sans-serif;font-size:.98rem;font-weight:700;margin-bottom:.3rem}
+.edu-sch{font-size:.82rem;color:var(--txt-m);margin-bottom:.75rem;line-height:1.45}
+.edu-ms{display:flex;gap:.45rem;flex-wrap:wrap}
+.edu-m{font-size:.66rem;font-weight:600;padding:3px 10px;border-radius:99px;background:rgba(245,158,11,.1);color:var(--amber-l);border:1px solid rgba(245,158,11,.2)}
+.lang-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:1.5rem;transition:.3s}
+.lang-card:hover{border-color:rgba(236,72,153,.35);box-shadow:var(--glow-p);transform:translateY(-4px)}
+.lang-row{display:flex;align-items:center;justify-content:space-between;padding:.65rem 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.lang-row:last-child{border-bottom:none}
+.lang-nm{font-size:.88rem;font-weight:500}
+.lb{font-size:.66rem;font-weight:600;padding:3px 10px;border-radius:99px}
+.lb-n{background:rgba(99,102,241,.13);color:var(--indigo-l);border:1px solid rgba(99,102,241,.22)}
+.lb-f{background:rgba(6,182,212,.13);color:var(--cyan-l);border:1px solid rgba(6,182,212,.22)}
+.lb-i{background:rgba(245,158,11,.13);color:var(--amber-l);border:1px solid rgba(245,158,11,.22)}
+
+/* ACHIEVEMENTS */
+.ach-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.2rem}
+.ach-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:1.3rem;display:flex;gap:.9rem;align-items:flex-start;transition:.3s}
+.ach-card:hover{border-color:rgba(6,182,212,.35);box-shadow:var(--glow-c);transform:translateY(-3px)}
+.ach-ic{font-size:1.6rem;flex-shrink:0}
+.ach-tx{font-size:.83rem;color:var(--txt-m);line-height:1.6}
+
+/* CONTACT */
+.ct-top{text-align:center;margin-bottom:3rem}
+.rip-av{width:88px;height:88px;border-radius:50%;margin:0 auto 1.5rem;background:var(--gi);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:#fff;position:relative}
+.rip-av::before,.rip-av::after{content:'';position:absolute;inset:0;border-radius:50%;border:2px solid rgba(99,102,241,.35);animation:ripp 2.2s ease infinite}
+.rip-av::after{animation-delay:.9s;border-color:rgba(236,72,153,.25)}
+@keyframes ripp{0%{transform:scale(1);opacity:.8}100%{transform:scale(2.4);opacity:0}}
+.ct-tag{font-size:1rem;color:var(--txt-m);max-width:420px;margin:0 auto;line-height:1.7}
+.ct-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.2rem}
+.ct-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:1.4rem;display:flex;align-items:center;gap:1rem;transition:.3s;cursor:none}
+.ct-card:hover{border-color:var(--bdr2);box-shadow:var(--glow-i);transform:translateY(-4px)}
+.ct-ic{width:44px;height:44px;border-radius:13px;flex-shrink:0;font-size:1.2rem;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(236,72,153,.15));border:1px solid rgba(99,102,241,.2)}
+.ct-lbl{font-size:.68rem;color:var(--txt-d);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.15rem}
+.ct-val{font-size:.88rem;font-weight:500;word-break:break-all}
+
+/* FOOTER */
+footer{text-align:center;padding:2.2rem;font-size:.78rem;color:var(--txt-d);border-top:1px solid var(--bdr);position:relative;z-index:1}
+footer em{font-style:normal;font-weight:600;background:var(--gi);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* RESPONSIVE */
+@media(max-width:800px){
+  .nav-menu{display:none;position:fixed;inset:62px 0 0;background:rgba(2,8,23,.97);backdrop-filter:blur(24px);flex-direction:column;align-items:center;justify-content:center;gap:2.5rem}
+  .nav-menu.open{display:flex}
+  .nav-menu a{font-size:1rem}
+  .nav-hbg{display:flex}
+  #hero{flex-direction:column;min-height:auto;padding-top:5rem;align-items:flex-start}
+  .hero-r{width:100%;display:flex;justify-content:center}
+  .c3{width:min(320px,90vw)}
+  .tl{padding-left:1.6rem}
+  .tl-dot{left:-1.9rem}
+  #cur,#cur-ring{display:none}
+  body{cursor:auto}
+}
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="ld-init">PP</div>
+  <div class="ld-bar-wrap"><div class="ld-bar"></div></div>
+  <div class="ld-sub">Initialising Portfolio</div>
+</div>
+
+<div id="cur"></div>
+<div id="cur-ring"></div>
+<canvas id="pcv"></canvas>
+
+<nav>
+  <div class="nav-brand">Pradip Patel</div>
+  <ul class="nav-menu" id="navMenu">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact" class="nav-btn">Contact</a></li>
+  </ul>
+  <button class="nav-hbg" id="hbg" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<main>
+
+<!-- HERO -->
+<section id="hero" class="wrap">
+  <div class="hero-l">
+    <div class="hero-pill"><span class="pill-dot"></span>Available for Senior iOS Roles</div>
+    <h1 class="hero-name">Pradip<br>Patel</h1>
+    <p class="hero-sub">
+      <strong>Senior Mobile Engineer</strong> — iOS, Flutter &amp; React Native.<br>
+      <strong>8+ years</strong> crafting high-performance apps used by millions.<br>
+      Swift · Objective-C · SwiftUI · Firebase · VIPER
+    </p>
+    <div class="hero-ctas">
+      <a href="#contact" class="btn btn-p">✉&nbsp; Get In Touch</a>
+      <a href="#experience" class="btn btn-s">View Experience ↓</a>
+    </div>
+  </div>
+  <div class="hero-r">
+    <div class="c3w">
+      <div class="c3" id="c3">
+        <div class="c3-head">
+          <div class="c3-av">PP</div>
+          <div>
+            <div class="c3-nm">Pradip Patel</div>
+            <div class="c3-rl">Senior iOS Developer · Ahmedabad</div>
+          </div>
+        </div>
+        <div class="stat-g">
+          <div class="stat"><div class="stat-n">8+</div><div class="stat-l">Years Exp</div></div>
+          <div class="stat"><div class="stat-n">20+</div><div class="stat-l">Apps Shipped</div></div>
+          <div class="stat"><div class="stat-n">4★+</div><div class="stat-l">App Store</div></div>
+          <div class="stat"><div class="stat-n">40%</div><div class="stat-l">Crash Reduction</div></div>
+        </div>
+        <div class="c3-tags">
+          <span class="c3-tag">Swift</span><span class="c3-tag">SwiftUI</span>
+          <span class="c3-tag">Firebase</span><span class="c3-tag">MVVM</span>
+          <span class="c3-tag">VIPER</span><span class="c3-tag">CI/CD</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SKILLS -->
+<section id="skills" class="wrap">
+  <div class="rv">
+    <div class="sec-lbl">What I Know</div>
+    <h2 class="sec-title">Technical Skills</h2>
+  </div>
+  <div class="sk-wrap">
+    <div class="sk-card rv">
+      <div class="sk-hd">Core iOS</div>
+      <div class="bar-row"><div class="bar-lbl"><span>Swift / SwiftUI</span><span>95%</span></div><div class="bar-bg"><div class="bar-fill" data-w="95" style="background:linear-gradient(90deg,var(--indigo),var(--indigo-l))"></div></div></div>
+      <div class="bar-row"><div class="bar-lbl"><span>Objective-C</span><span>90%</span></div><div class="bar-bg"><div class="bar-fill" data-w="90" style="background:linear-gradient(90deg,var(--pink),var(--pink-l))"></div></div></div>
+      <div class="bar-row"><div class="bar-lbl"><span>UIKit / Auto Layout</span><span>95%</span></div><div class="bar-bg"><div class="bar-fill" data-w="95" style="background:linear-gradient(90deg,var(--cyan),var(--cyan-l))"></div></div></div>
+      <div class="bar-row"><div class="bar-lbl"><span>Core Data / Realm</span><span>88%</span></div><div class="bar-bg"><div class="bar-fill" data-w="88" style="background:linear-gradient(90deg,var(--amber),var(--amber-l))"></div></div></div>
+    </div>
+    <div class="sk-card rv">
+      <div class="sk-hd">Architecture &amp; DevOps</div>
+      <div class="bar-row"><div class="bar-lbl"><span>MVVM / VIPER / MVC</span><span>93%</span></div><div class="bar-bg"><div class="bar-fill" data-w="93" style="background:linear-gradient(90deg,var(--indigo),var(--pink))"></div></div></div>
+      <div class="bar-row"><div class="bar-lbl"><span>Firebase Suite</span><span>90%</span></div><div class="bar-bg"><div class="bar-fill" data-w="90" style="background:linear-gradient(90deg,var(--pink),var(--cyan))"></div></div></div>
+      <div class="bar-row"><div class="bar-lbl"><span>CI/CD / TestFlight</span><span>85%</span></div><div class="bar-bg"><div class="bar-fill" data-w="85" style="background:linear-gradient(90deg,var(--cyan),var(--indigo))"></div></div></div>
+      <div class="bar-row"><div class="bar-lbl"><span>REST APIs / Alamofire</span><span>93%</span></div><div class="bar-bg"><div class="bar-fill" data-w="93" style="background:linear-gradient(90deg,var(--amber),var(--pink))"></div></div></div>
+    </div>
+    <div class="sk-card rv">
+      <div class="sk-hd">iOS Frameworks</div>
+      <div class="chips">
+        <span class="chip ci">UIKit</span><span class="chip cp">Combine</span><span class="chip cc">AVFoundation</span>
+        <span class="chip ca">MapKit</span><span class="chip ci">ARKit</span><span class="chip cp">SceneKit</span>
+        <span class="chip cc">StoreKit</span><span class="chip ca">Core Animation</span><span class="chip ci">CLLocation</span>
+        <span class="chip cp">UserNotifications</span><span class="chip cc">GCD</span><span class="chip ca">XCTest</span>
+      </div>
+    </div>
+    <div class="sk-card rv">
+      <div class="sk-hd">Cross-Platform &amp; AI Tools</div>
+      <div class="chips">
+        <span class="chip ci">Flutter</span><span class="chip cp">React Native</span><span class="chip cc">Claude.ai</span>
+        <span class="chip ca">GitHub Copilot</span><span class="chip ci">Google Gemini</span><span class="chip cp">ChatGPT</span>
+        <span class="chip cc">Cursor</span><span class="chip ca">Xcode</span><span class="chip ci">Sourcetree</span>
+        <span class="chip cp">CocoaPods</span><span class="chip cc">SPM</span><span class="chip ca">Alamofire</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EXPERIENCE -->
+<section id="experience" class="wrap">
+  <div class="rv">
+    <div class="sec-lbl">Career Journey</div>
+    <h2 class="sec-title">Experience</h2>
+  </div>
+  <div class="tl">
+    <div class="tl-item rv">
+      <div class="tl-dot"></div>
+      <div class="tl-card">
+        <div class="tl-top"><div class="tl-co">Silver Touch Technologies Ltd</div><div class="tl-date">Jun 2020 – Present</div></div>
+        <div class="tl-role">iOS Developer · Ahmedabad, Gujarat</div>
+        <ul class="tl-ul">
+          <li>Led end-to-end development of 20+ high-traffic enterprise iOS apps (news, social media, government) impacting thousands of daily users.</li>
+          <li>Built offline-first architectures using Core Data &amp; RESTful APIs maintaining 99.9% reliability during network drops.</li>
+          <li>Reduced app load times by 30% via advanced memory management; cut crash rates by 40% using Firebase Crashlytics.</li>
+          <li>Increased onboarding completion by 25% implementing seamless Sign in with Apple authentication flows.</li>
+          <li>Fortified enterprise apps with Keychain services and AES-256 encryption for regulatory compliance.</li>
+          <li>Partnered with design &amp; product teams translating requirements into XCTest-backed technical user stories.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tl-item rv">
+      <div class="tl-dot"></div>
+      <div class="tl-card">
+        <div class="tl-top"><div class="tl-co">KBA Systems</div><div class="tl-date">Aug 2018 – Apr 2020</div></div>
+        <div class="tl-role">iOS Developer · Ahmedabad, Gujarat</div>
+        <ul class="tl-ul">
+          <li>Built social media platforms with real-time chat, media handling &amp; tagging via Firebase Realtime Database &amp; Cloud Storage.</li>
+          <li>Integrated Apple In-App Purchases &amp; subscription models with receipt validation — drove 20% revenue growth.</li>
+          <li>Maintained 95% crash-free user rate through rigorous Firebase Crashlytics monitoring and Push Notifications.</li>
+          <li>Streamlined data serialization and API communications using Alamofire and advanced networking patterns.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tl-item rv">
+      <div class="tl-dot"></div>
+      <div class="tl-card">
+        <div class="tl-top"><div class="tl-co">SculptSoft</div><div class="tl-date">Dec 2017 – Aug 2018</div></div>
+        <div class="tl-role">Junior iOS Developer · Ahmedabad, Gujarat</div>
+        <ul class="tl-ul">
+          <li>Built resilient offline-first apps with Core Data &amp; Realm ensuring seamless background synchronisation.</li>
+          <li>Integrated Paytm Payment Gateway for secure, error-free transaction processing and smooth checkouts.</li>
+          <li>Crafted responsive universal iOS interfaces using Storyboards &amp; programmatic Auto Layout across all screen sizes.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROJECTS -->
+<section id="projects" class="wrap">
+  <div class="rv">
+    <div class="sec-lbl">Highlighted Work</div>
+    <h2 class="sec-title">Projects</h2>
+  </div>
+  <div class="proj-g">
+    <div class="proj-card rv">
+      <div class="proj-em">🇮🇳</div>
+      <div class="proj-nm">Narendra Modi App</div>
+      <div class="proj-ds">Official PM engagement platform — NaMo TV, Mann Ki Baat, E-Mail integration &amp; Micro-Donations. Serving millions nationally. Led team of 4.</div>
+      <div class="proj-tags"><span class="proj-tag">Swift</span><span class="proj-tag">Objective-C</span><span class="proj-tag">Team Lead</span></div>
+    </div>
+    <div class="proj-card rv">
+      <div class="proj-em">⚓</div>
+      <div class="proj-nm">Indian Navy</div>
+      <div class="proj-ds">Official Indian Navy mobile app for defense personnel — maintained &amp; enhanced with new features ensuring rock-solid production stability.</div>
+      <div class="proj-tags"><span class="proj-tag">Objective-C</span><span class="proj-tag">Maintenance</span></div>
+    </div>
+    <div class="proj-card rv">
+      <div class="proj-em">🛂</div>
+      <div class="proj-nm">MEA India</div>
+      <div class="proj-ds">Ministry of External Affairs citizen app — passport services, visa tracking &amp; consular assistance for Indians worldwide.</div>
+      <div class="proj-tags"><span class="proj-tag">Swift</span><span class="proj-tag">Government</span><span class="proj-tag">Lead</span></div>
+    </div>
+    <div class="proj-card rv">
+      <div class="proj-em">🎓</div>
+      <div class="proj-nm">Vidyanjali 2.0</div>
+      <div class="proj-ds">Scalable portal connecting Ministry of Education with global volunteers, NRI professionals &amp; private sector for school development.</div>
+      <div class="proj-tags"><span class="proj-tag">Swift</span><span class="proj-tag">EdTech</span></div>
+    </div>
+    <div class="proj-card rv">
+      <div class="proj-em">🌍</div>
+      <div class="proj-nm">PBD – Pravasi Bharatiya Divas</div>
+      <div class="proj-ds">Digital engagement hub for the Indian diaspora — networking, field-specific collaboration &amp; digitized award nomination workflows.</div>
+      <div class="proj-tags"><span class="proj-tag">Swift</span><span class="proj-tag">Solo</span><span class="proj-tag">Networking</span></div>
+    </div>
+    <div class="proj-card rv">
+      <div class="proj-em">📱</div>
+      <div class="proj-nm">+15 More Apps</div>
+      <div class="proj-ds">Know Your Temple, Khel Sathi, News On Air, National War Memorial, Aaple Sarkar, ASI, MGNarega, MyRDD, My Gov Maharashtra, SharkID, Foodel &amp; more.</div>
+      <div class="proj-tags"><span class="proj-tag">Swift</span><span class="proj-tag">Obj-C</span><span class="proj-tag">Multi-Domain</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EDUCATION -->
+<section id="education" class="wrap">
+  <div class="rv">
+    <div class="sec-lbl">Background</div>
+    <h2 class="sec-title">Education &amp; Languages</h2>
+  </div>
+  <div class="edu-g">
+    <div class="edu-card rv">
+      <div class="edu-ic">🏛️</div>
+      <div class="edu-deg">B.E. in Computer Science Engineering</div>
+      <div class="edu-sch">Laljibhai Chaturbhai Institute of Technology, Bhandu</div>
+      <div class="edu-ms"><span class="edu-m">2012 – 2017</span><span class="edu-m">CGPA 6.29</span></div>
+    </div>
+    <div class="edu-card rv">
+      <div class="edu-ic">📜</div>
+      <div class="edu-deg">iOS Mobile Application Development</div>
+      <div class="edu-sch">iCreate Technologies, Ahmedabad, Gujarat</div>
+      <div class="edu-ms"><span class="edu-m">Jul – Nov 2017</span><span class="edu-m">Certified</span></div>
+    </div>
+    <div class="lang-card rv">
+      <div class="sk-hd" style="margin-bottom:1rem">Languages Spoken</div>
+      <div class="lang-row"><span class="lang-nm">Gujarati</span><span class="lb lb-n">Native</span></div>
+      <div class="lang-row"><span class="lang-nm">Hindi</span><span class="lb lb-f">Fluent</span></div>
+      <div class="lang-row"><span class="lang-nm">English</span><span class="lb lb-i">Intermediate</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ACHIEVEMENTS -->
+<section id="achievements" class="wrap">
+  <div class="rv">
+    <div class="sec-lbl">Recognition</div>
+    <h2 class="sec-title">Achievements</h2>
+  </div>
+  <div class="ach-g">
+    <div class="ach-card rv"><div class="ach-ic">🏆</div><div class="ach-tx">Delivered 20+ production iOS apps with consistent 4+ star App Store ratings across government, social &amp; enterprise domains.</div></div>
+    <div class="ach-card rv"><div class="ach-ic">🐛</div><div class="ach-tx">Reduced crash rates by 40% through systematic code optimisation and real-time monitoring via Firebase Crashlytics.</div></div>
+    <div class="ach-card rv"><div class="ach-ic">⚡</div><div class="ach-tx">Improved performance metrics by 30% via advanced memory management, lazy loading &amp; intelligent caching strategies.</div></div>
+    <div class="ach-card rv"><div class="ach-ic">🤖</div><div class="ach-tx">Recognised for rapid adoption of emerging tech — ARKit, SceneKit, ML frameworks &amp; AI-powered development tools.</div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section id="contact" class="wrap">
+  <div class="rv ct-top">
+    <div class="sec-lbl">Say Hello</div>
+    <div class="rip-av">PP</div>
+    <h2 class="sec-title" style="margin-bottom:.8rem">Let's Build Together</h2>
+    <p class="ct-tag">Open to Senior iOS Developer roles. I bring 8+ years of craft, performance focus &amp; a passion for clean architecture.</p>
+  </div>
+  <div class="ct-g rv">
+    <a href="mailto:patelpradip3435@gmail.com" class="ct-card">
+      <div class="ct-ic">✉️</div>
+      <div><div class="ct-lbl">Email</div><div class="ct-val">patelpradip3435@gmail.com</div></div>
+    </a>
+    <a href="tel:+918866803934" class="ct-card">
+      <div class="ct-ic">📞</div>
+      <div><div class="ct-lbl">Phone</div><div class="ct-val">+91 8866803934</div></div>
+    </a>
+    <a href="https://linkedin.com/in/pradip-ios" target="_blank" rel="noopener" class="ct-card">
+      <div class="ct-ic">💼</div>
+      <div><div class="ct-lbl">LinkedIn</div><div class="ct-val">linkedin.com/in/pradip-ios</div></div>
+    </a>
+    <div class="ct-card">
+      <div class="ct-ic">📍</div>
+      <div><div class="ct-lbl">Location</div><div class="ct-val">Ahmedabad, Gujarat, India</div></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Crafted with ❤️ by <em>Pradip Patel</em> &nbsp;·&nbsp; Senior iOS Developer &nbsp;·&nbsp; 2025
+</footer>
+
+<script>
+/* LOADER */
+window.addEventListener('load', () => setTimeout(() => document.getElementById('loader').classList.add('out'), 2000));
+
+/* CURSOR */
+const cur = document.getElementById('cur'), ring = document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cur.style.cssText+=`;left:${mx}px;top:${my}px`; });
+(function loop(){rx+=(mx-rx)*.11;ry+=(my-ry)*.11;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
+document.querySelectorAll('a,button,.proj-card,.sk-card,.tl-card,.ach-card,.ct-card,.stat,.chip').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hov'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hov'));
+});
+
+/* PARTICLES */
+(()=>{
+  const cv=document.getElementById('pcv'),cx=cv.getContext('2d');
+  const COLS=['rgba(99,102,241,.65)','rgba(236,72,153,.55)','rgba(6,182,212,.55)','rgba(245,158,11,.45)'];
+  let W,H,pts=[];
+  function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight}
+  function init(){pts=Array.from({length:85},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.28,vy:(Math.random()-.5)*.28,r:Math.random()*1.8+.4,c:COLS[Math.floor(Math.random()*4)]}))}
+  resize();init();
+  window.addEventListener('resize',()=>{resize();init()});
+  (function draw(){
+    cx.clearRect(0,0,W,H);
+    for(let i=0;i<pts.length;i++){
+      const p=pts[i];
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>W)p.vx*=-1;
+      if(p.y<0||p.y>H)p.vy*=-1;
+      cx.beginPath();cx.arc(p.x,p.y,p.r,0,Math.PI*2);cx.fillStyle=p.c;cx.fill();
+      for(let j=i+1;j<pts.length;j++){
+        const q=pts[j],d=Math.hypot(p.x-q.x,p.y-q.y);
+        if(d<125){cx.beginPath();cx.moveTo(p.x,p.y);cx.lineTo(q.x,q.y);cx.strokeStyle=`rgba(99,102,241,${.16*(1-d/125)})`;cx.lineWidth=.5;cx.stroke()}
+      }
+    }
+    requestAnimationFrame(draw);
+  })();
+})();
+
+/* NAV */
+const hbg=document.getElementById('hbg'),menu=document.getElementById('navMenu');
+hbg.addEventListener('click',()=>menu.classList.toggle('open'));
+menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>menu.classList.remove('open')));
+
+/* SCROLL REVEAL */
+const ro=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.1});
+document.querySelectorAll('.rv').forEach(el=>ro.observe(el));
+
+/* SKILL BARS */
+const bo=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.querySelectorAll('.bar-fill').forEach(b=>b.style.width=b.dataset.w+'%')}),{threshold:.25});
+document.querySelectorAll('.sk-card').forEach(c=>bo.observe(c));
+
+/* 3D CARD */
+const c3=document.getElementById('c3');
+if(c3){
+  document.addEventListener('mousemove',e=>{
+    const r=c3.getBoundingClientRect(),cx2=r.left+r.width/2,cy2=r.top+r.height/2;
+    const dx=(e.clientX-cx2)/(innerWidth/2)*9,dy=(e.clientY-cy2)/(innerHeight/2)*-7;
+    c3.style.transform=`rotateY(${dx}deg) rotateX(${dy}deg)`;
+  });
+}
+
+/* ACTIVE NAV */
+const secs=[...document.querySelectorAll('section[id]')],navAs=[...document.querySelectorAll('.nav-menu a')];
+window.addEventListener('scroll',()=>{
+  let active='';
+  secs.forEach(s=>{if(scrollY>=s.offsetTop-90)active=s.id});
+  navAs.forEach(a=>a.style.color=a.getAttribute('href')==='#'+active?'var(--indigo-l)':'');
+},{passive:true});
+</script>
+</body>
+</html>
